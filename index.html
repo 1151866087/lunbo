@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +7,9 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
-
 <body>
-    <div class="container" id="container">
-        <div class="list" id="list" style="left: -600px">
+    <div class="container">
+        <div class="list" id="list" style="left:-600px">
             <img src="images/05.png" alt="">
             <img src="images/01.png" alt="">
             <img src="images/02.png" alt="">
@@ -32,30 +30,53 @@
     </div>
     <script>
         var list = document.getElementById("list");
-        var container = document.getElementById("contanier");
-        var prev = document.getElementById("prev")
+        var prev = document.getElementById("prev");
         var next = document.getElementById("next");
         var btns = document.getElementById("btns").children;
-        next.onclick = function(){
-            let newLeft = parseInt(list.style.left) + (-600);
-            console.log(newLeft);
-            if (newLeft < -3000) {
-                list.style.left = -600 + "px";
-            }
-            else {
-                list.style.left = newLeft + "px";
-            }            
-        }
+        var index = 0;
         prev.onclick = function(){
-            let newLeft = parseInt(list.style.left)+600;
+            index--;
+            if(index<0){
+                index = 4 ;
+            }
+            animate(600);
+            showBtn();
+        }
+        next.onclick = function(){
+            index++;
+            if(index>4){
+                index = 0;
+            }
+            animate(-600);
+            showBtn();
+        }
+        for(let i = 0;i<btns.length;i++){
+            btns[i].index = i;
+            btns[i].onclick = function(){
+                var offset = (this.index - index)*(-600);
+                index = this.index;
+                animate(offset);
+                showBtn()
+            }
+        }
+        function animate(offset){
+            let newLeft = parseInt(list.style.left) + offset;
             if(newLeft > -600){
                 list.style.left = -3000 + "px";
             }
-            else{
-                list.style.left = newLeft + "px"
+            else if(newLeft < -3000){
+                list.style.left = -600 + "px";
             }
+            else{
+                list.style.left = newLeft + "px";
+            }
+        }
+        function showBtn(){
+            for(let i = 0 ;i<btns.length;i++){
+                btns[i].classList.remove("current");
+            }
+            btns[index].classList.add("current");
         }
     </script>
 </body>
-
 </html>
